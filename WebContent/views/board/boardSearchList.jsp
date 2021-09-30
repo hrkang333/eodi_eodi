@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import = "java.util.ArrayList, semiProject.com.kh.board.model.vo.*,
+    pageEncoding="UTF-8" import = "java.util.ArrayList, semiProject.com.kh.board.model.vo.PageInfo,
+    semiProject.com.kh.board.model.vo.Board,
     semiProject.com.kh.notice.model.vo.*"
     
     %>
