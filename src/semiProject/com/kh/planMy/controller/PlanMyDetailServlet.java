@@ -50,7 +50,7 @@ public class PlanMyDetailServlet extends HttpServlet {
 			request.setAttribute("pList", pList);
 			request.getRequestDispatcher("views/plan/planSaveDetail.jsp").forward(request, response);
 		}else {
-			request.setAttribute("msg", "일정 상세보기 실패");
+			request.getSession().setAttribute("msg", "일정 상세보기 실패");
 			RequestDispatcher view = request.getRequestDispatcher("views/common/errorPage.jsp");
 			view.forward(request, response);
 		}

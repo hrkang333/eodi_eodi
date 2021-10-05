@@ -50,8 +50,6 @@ public class PlanMyUpdateServlet extends HttpServlet {
 		String planMemo = request.getParameter("planMemo");  			  //4. 메모
 		int areaNo = Integer.parseInt(request.getParameter("planArea"));  //5. 지역	
 		
-		
-		//PlanMy pm = new PlanMy(planNo, areaNo, planTitle, planDate, planMemo.replaceAll("\n","<br>"));  //1.pm -> MYPLAN 테이블에 넣어주기
 		PlanMy pm = new PlanMy();
 		pm.setPlanNo(planNo);
 		pm.setAreaNo(areaNo);
@@ -59,19 +57,10 @@ public class PlanMyUpdateServlet extends HttpServlet {
 		pm.setPlanDate(planDate);
 		pm.setPlanMemo(planMemo.replaceAll("\n","<br>"));
 
-		String[] planPlaces = request.getParameterValues("placeNo");            //2.planPlace -> MYPLAN_PLACE 테이블에 넣어주기
+		String[] planPlaces = request.getParameterValues("placeNo");            //1.planPlace -> MYPLAN_PLACE 테이블에 넣어주기
 		
-		int result = new PlanMyService().updatePlanMy(pm, planNo, planPlaces);  //planNo도 같이 넘기자->MYPLAN_PLACE에 추가할때를 위해서
-		
-		
-//		System.out.println("updateServlet__ pm : " + pm);
-//		System.out.println("updateServlet__ planNo : " + planNo);
-		
-//		for(String s: planPlaces) {
-//			System.out.println("updateServlet__ planPlaces(장소번호) : " + s);
-//		}
+		int result = new PlanMyService().updatePlanMy(pm, planNo, planPlaces);  //2.planNo도 같이 넘기자->MYPLAN_PLACE에 추가할때를 위해서
 
-		
 		if(result > 0) {
 			request.setAttribute("planNo", planNo);
 			request.getSession().setAttribute("msg", "일정이 수정되었습니다.");

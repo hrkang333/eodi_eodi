@@ -620,6 +620,15 @@
 		        }else{
 		            alert("장소는 하나씩만 추가해주세요:)");
 		        }
+		        
+		        $(function(){
+	    			if(placeArr.length > 20){
+	    				alert("일정은 20개까지 저장가능합니다.")
+	    				$("#my_tbody>tbody>tr:last").remove();
+	    				placeArr.pop();
+	    				return;
+	    			}
+	    		})
 		    });
 
 		    //테이블에 추가된 일정 중복여부 체크

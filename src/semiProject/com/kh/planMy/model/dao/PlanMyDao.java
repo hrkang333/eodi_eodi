@@ -1,6 +1,6 @@
 package semiProject.com.kh.planMy.model.dao;
 
-import static semiProject.com.kh.common.JDBCTemplate.*;
+import static semiProject.com.kh.common.JDBCTemplate.close;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,12 +10,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
-import semiProject.com.kh.area.model.vo.Area;
 import semiProject.com.kh.board.model.vo.PageInfo;
 import semiProject.com.kh.place.model.vo.Place;
 import semiProject.com.kh.planMy.model.vo.PlanMy;
+import semiProject.com.kh.planMy.model.vo.PlanMyPlace;
 
 public class PlanMyDao {
 	
@@ -193,7 +194,8 @@ public class PlanMyDao {
 		int result = 0;
 		PreparedStatement pstmt = null;
 
-	    String sql = prop.getProperty("deletePlanMy");
+	    //String sql = prop.getProperty("deletePlanMy");
+	    String sql = "UPDATE MYPLAN SET STATUS='N' WHERE PLAN_NO=?";
 	    //deletePlanMy=UPDATE MYPLAN SET STATUS='N' WHERE PLAN_NO=?
 	    
 	    try {
@@ -337,32 +339,32 @@ public class PlanMyDao {
 		return result;
 	}
 
-	//추가해줘야 하는 장소가 있다면(1개 이상이라면) 
-	public int updateAddPlace(Connection conn, int planNo, ArrayList<String> insertDB) {
-		int result = 0;
-		PreparedStatement pstmt = null;
-		
-		String sql = prop.getProperty("updateInsPlace");
-		//updateInsPlace=INSERT INTO MYPLAN_PLACE VALUES(SEQ_MPPNO.NEXTVAL, ?, ?, DEFAULT)
-		
-		try {
-			for(int i=0; i<insertDB.size(); i++) {
-				
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setInt(1, planNo);
-				pstmt.setInt(2, Integer.parseInt(insertDB.get(i)));
-				
-				result += pstmt.executeUpdate();
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			close(pstmt);
-		}
-		
-		return result;
-	}
+	//추가해줘야 하는 장소가 있다면(1개 이상이라면) -> 10/05 수정 
+//	public int updateAddPlace(Connection conn, int planNo, ArrayList<String> insertDB) {
+//		int result = 0;
+//		PreparedStatement pstmt = null;
+//		
+//		String sql = prop.getProperty("updateInsPlace");
+//		//updateInsPlace=INSERT INTO MYPLAN_PLACE VALUES(SEQ_MPPNO.NEXTVAL, ?, ?, DEFAULT)
+//		
+//		try {
+//			for(int i=0; i<insertDB.size(); i++) {
+//				
+//				pstmt = conn.prepareStatement(sql);
+//				pstmt.setInt(1, planNo);
+//				pstmt.setInt(2, Integer.parseInt(insertDB.get(i)));
+//				
+//				result += pstmt.executeUpdate();
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			close(pstmt);
+//		}
+//		
+//		return result;
+//	}
 
 	//update로 삭제해줘야 할 장소가 있다면(1개 이상이라면)
 	public int updateDelPlace(Connection conn, int planNo, ArrayList<String> deleteDB) {
@@ -642,4 +644,113 @@ public class PlanMyDao {
 
 		      return pList;
 		   }
+
+	//10.02 update기능 수정
+	public ArrayList<PlanMyPlace> selectMyPlanPlaceNos(Connection conn, int planNo) {
+		
+		ArrayList<PlanMyPlace> originPlace = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		String sql = prop.getProperty("selectMyPlanPlaceNos"); 
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, planNo);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				PlanMyPlace pmp = new PlanMyPlace();
+				pmp.setMpPlaceNo(rs.getInt("MP_PLACE_NO"));
+				
+				originPlace.add(pmp);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+
+		System.out.println("update수정중 : " + originPlace);
+		return originPlace;
+	}
+
+	//10.02 update기능 수정
+	public int updateSamePlace(Connection conn, List<PlanMyPlace> mpPlaceNo, String[] update) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("updateSamePlace");
+		
+		try {
+			for(int i=0; i<mpPlaceNo.size(); i++) {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, Integer.parseInt(update[i]));
+				pstmt.setInt(2, mpPlaceNo.get(i).getMpPlaceNo());
+				
+				result += pstmt.executeUpdate();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+	//10.02 update기능 수정
+	public int updateDelPlace(Connection conn, List<PlanMyPlace> del_mpPlaceNo) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("updateDelPlace");
+		try {
+			for(int i=0; i<del_mpPlaceNo.size(); i++) {
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, del_mpPlaceNo.get(i).getMpPlaceNo());
+				
+				result += pstmt.executeUpdate();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+	//10.02 update기능 수정
+	public int updateAddPlace(Connection conn, int planNo, String[] insert_arr) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String sql = prop.getProperty("updateAddPlace");
+		
+		try {
+			for(int i=0; i<insert_arr.length; i++) {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, planNo);
+				pstmt.setInt(2, Integer.parseInt(insert_arr[i]));
+				
+				result += pstmt.executeUpdate();
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
 }

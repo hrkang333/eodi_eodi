@@ -8,12 +8,13 @@ import static semiProject.com.kh.common.JDBCTemplate.rollback;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import semiProject.com.kh.area.model.vo.Area;
 import semiProject.com.kh.board.model.vo.PageInfo;
 import semiProject.com.kh.place.model.vo.Place;
 import semiProject.com.kh.planMy.model.dao.PlanMyDao;
 import semiProject.com.kh.planMy.model.vo.PlanMy;
+import semiProject.com.kh.planMy.model.vo.PlanMyPlace;
 
 public class PlanMyService {
 
@@ -88,7 +89,41 @@ public class PlanMyService {
 	public int updatePlanMy(PlanMy pm, int planNo, String[] update) {  //업데이트하려는 장소번호 배열 ex)update : ["7","8"]
 		
 		Connection conn = getConnection();
+		ArrayList<PlanMyPlace> origin = new PlanMyDao().selectMyPlanPlaceNos(conn, planNo);  //planNo에 저장된 mp_place_no 얻기 [296,297,298,299,300]
+		
+		int result1 = new PlanMyDao().updatePlanMy(conn, pm);
+		int result2 = 0;  //dao --> updateSamePlace()
+		int result3 = 1;
+		
+		//3가지 경우에 따라 update 다르게 해주기
+		if(origin.size() == update.length) { //1. 수정 전, 수정 후 장소 갯수 같을 때
+			result2 = new PlanMyDao().updateSamePlace(conn, origin, update);
+			
+		}else if(origin.size() > update.length){ //2. 수정 전 장소 갯수 > 수정 후 장소 갯수 
+			List<PlanMyPlace> n_mpPlaceNo = origin.subList(0, update.length); //update만큼 origin 자르기
+			List<PlanMyPlace> del_mpPlaceNo = origin.subList(update.length, origin.size()); //origin에서 남은 부분 delete시키기
+			
+			result2 = new PlanMyDao().updateSamePlace(conn, n_mpPlaceNo, update);//원래 mp_place_no에 update장소번호 넣기
+			result3 = new PlanMyDao().updateDelPlace(conn, del_mpPlaceNo);  //origin에서 없어진만큼 상태 n으로 바꾸기
+			
+		}else {  //3. 수정 전 장소 갯수 < 수정 후 장소 갯수 
+			String[] update_arr = Arrays.copyOfRange(update, 0, origin.size());
+			String[] insert_arr = Arrays.copyOfRange(update, origin.size(), update.length);
+			
+			result2 = new PlanMyDao().updateSamePlace(conn, origin, update_arr);
+			result3 = new PlanMyDao().updateAddPlace(conn, planNo, insert_arr);
+		}
 
+		if(result1>0 && result2>0 && result3>0) {
+			commit(conn);
+		}else {
+			rollback(conn);
+		}
+		close(conn);
+		
+		return result1*result2*result3;
+
+		/*
 		int result1 = new PlanMyDao().updatePlanMy(conn, pm);
 		int result2 = 1;  //추가해줘야 하는 장소
 		int result3 = 1;  //update해줘야 하는 장소
@@ -136,6 +171,7 @@ public class PlanMyService {
 		}
 		close(conn);
 		return result1 * result2 * result3;
+		*/
 	}
 
 	public ArrayList<Place> areaNoPlaceList(int areaNo) {
@@ -170,10 +206,10 @@ public class PlanMyService {
 		return list;
 	}
 
-	public int addPlanPlace(int planNo, ArrayList<String> placeNo) {
+	public int addPlanPlace(int planNo, String[] place_one) {  //arraylist -> [] 수정
 		Connection conn = getConnection();
 		
-		int result = new PlanMyDao().updateAddPlace(conn, planNo, placeNo);
+		int result = new PlanMyDao().updateAddPlace(conn, planNo, place_one);
 		close(conn);
 		return result;
 	}
