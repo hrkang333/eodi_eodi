@@ -35,12 +35,15 @@ public class AddPlanPlaceServlet extends HttpServlet {
 		int planNo = Integer.parseInt(request.getParameter("planNo"));
 		
 		String b_placeNo = request.getParameter("placeNo");
-		ArrayList<String> placeNo = new ArrayList<String>();
-		placeNo.add(b_placeNo);
+		String[] place_one = new String[1]; //장소 상세보기에서 일정추가 -> 장소는 언제나 1개이다.
+		place_one[0] = b_placeNo;
 		
+//		ArrayList<String> placeNo = new ArrayList<String>();
+//		placeNo.add(b_placeNo);
+//		
 //		System.out.println("planNo 어레이리스트 사이즈: " + placeNo.size() + " 뭐 들었나?" + placeNo.get(0));
 		
-		int result = new PlanMyService().addPlanPlace(planNo, placeNo);
+		int result = new PlanMyService().addPlanPlace(planNo, place_one);
 		response.setCharacterEncoding("UTF-8");
 		
 		if(result > 0) {

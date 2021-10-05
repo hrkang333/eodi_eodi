@@ -150,7 +150,7 @@
         }
         .modal-body{
 			width:100%;
-			height: 265px;
+			height: 330px;
 			padding: 15px 20px 15px 20px;
 		}
 		.content_scroll{
@@ -160,22 +160,21 @@
 		}
 		.plan_box{
 			width:100%;
-			min-height:67px;
+			min-height:73px;
 			background:#f4f3f3;
 			margin-top:3px;
 		}
 		.plan_left{
 			float:left;
-			width:360px;
+			width:80%;
 			padding-left:15px;
 		}
 		.plan_select{
-			width:60px;
+			width:15%;
 			height:30px;
 			text-align:center;
-			float:right;
+			float:left;
 			cursor:pointer;
-			margin-right:15px;
 			margin-top:20px;
 			font-size:13px;
 			background:#D958A0;
@@ -184,7 +183,7 @@
 		}
 		.plan_title{
 			margin-top: 10px;
-		    font-size: 18px;
+		    font-size: 21px;
 		    font-weight: bold;
 		}
 		.pleaseCenter{
@@ -361,6 +360,7 @@
 					}
 					console.log(value);
 					$("#thumbList").html(value).trigger("create");
+					/* $("#thumbList").html(value); */
 				},
 				error:function(){
 					console.log("ajax통신실패");

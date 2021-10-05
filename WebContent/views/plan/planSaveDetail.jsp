@@ -271,40 +271,6 @@
 	                    	<%}%>
 	                    </tbody>
 	                </table>
-	                
-	               <%--  <div class="blog__pagination">
-						<!-- 맨 처음으로 (<<) -->
-						<a href="<%=contextPath%>/detailP.ps?planNo=<%=pm.getPlanNo()%>&currentPage=1"> &lt;&lt; </a> 
-		
-						<!-- 이전페이지로(<) -->
-						<%if(currentPage == 1){ %>
-						<a class="noHover"> &lt; </a>
-						<%}else{ %>
-						<a href="<%= contextPath %>/detailP.ps?planNo=<%=pm.getPlanNo()%>&currentPage=<%= currentPage-1 %>"> &lt; </a>
-						<%} %>
-						
-						<!-- 페이지 목록 -->
-						<%for(int p=startPage; p<=endPage; p++){ %>
-							
-							<%if(p == currentPage){ %>
-							<a class="noHover"> <%= p %> </a>
-							<%}else{ %>
-							<a href="<%=contextPath %>/detailP.ps?planNo=<%=pm.getPlanNo()%>&currentPage=<%= p %>"> <%= p %> </a>
-							<%} %>
-							
-						<%} %>
-						
-						<!-- 다음페이지로(>) -->
-						<%if(currentPage == maxPage){ %>
-						<a class="noHover"> &gt; </a>
-						<%}else { %>
-						<a href="<%= contextPath %>/detailP.ps?planNo=<%=pm.getPlanNo()%>&currentPage=<%= currentPage+1 %>"> &gt; </a>
-						<%} %>
-					
-						<!-- 맨 끝으로 (>>) -->
-						<a href="<%=contextPath%>/detailP.ps?planNo=<%=pm.getPlanNo()%>?currentPage=<%=maxPage%>"> &gt;&gt; </a>
-					</div>  --%>
-					<!-- 페이징바 끝 -->
 				</div>
 				<div class="col-lg-3">
 					<div class="planDetail_detail">

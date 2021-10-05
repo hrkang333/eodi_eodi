@@ -1,8 +1,6 @@
 package semiProject.com.kh.planMy.controller;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -57,7 +55,7 @@ public class PlanMyUpdateFormServlet extends HttpServlet {
 			request.setAttribute("aList", aList);
 			request.getRequestDispatcher("views/plan/planMyUpdateForm.jsp").forward(request, response);;
 		}else {
-			request.setAttribute("msg", "수정할 일정을 불러오는데 실패했습니다.");
+			request.getSession().setAttribute("msg", "수정할 일정을 불러오는데 실패했습니다.");
 			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
 		}
 

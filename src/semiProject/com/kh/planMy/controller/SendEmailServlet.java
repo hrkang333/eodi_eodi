@@ -57,7 +57,7 @@ public class SendEmailServlet extends HttpServlet {
 		int port = 465;
 
 		//아래 메일내용구성
-		String content = "해당 일정을 찾지 못했습니다. \n관리자에게 문의 부탁드립니다. 이용에 불편을 드려 죄송합니다.\n더 나은 어디어디가 되도록 노력하겠습니다.";
+		String content = "해당 장소를 찾지 못했습니다. \n관리자에게 문의 부탁드립니다. 이용에 불편을 드려 죄송합니다.\n더 나은 어디어디가 되도록 노력하겠습니다.";
 		String detail = "";
 		int index = 1;
 		int price = 0;
@@ -74,7 +74,7 @@ public class SendEmailServlet extends HttpServlet {
 		// 메일 받을 주소, 제목, 내용
 		String recipient = userEmail;
 		String subject = "[EodiEodi] "+mem.getUserName()+"님의 일정입니다.";
-		if(pm != null) { //pm이 null인 경우는 존재하지 않겠지만 그래도 언제나 null대비!
+		if(pm != null && pList.size() != 0) { //pm이 null인 경우는 존재하지 않겠지만 그래도 언제나 null대비!
 			content = "안녕하세요 어디어디입니다."+mem.getUserName()+"님께서 요청하신 일정을 아래와 같이 보내드립니다.\n"
 				       + "\n📌제목 : " + pm.getPlanTitle() 
 				       + "\n📌일정 일자 : " + pm.getPlanDate() 
