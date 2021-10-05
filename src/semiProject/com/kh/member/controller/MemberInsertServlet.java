@@ -40,7 +40,6 @@ public class MemberInsertServlet extends HttpServlet {
 		String gender = request.getParameter("gender");
 		
 		Member mem = new Member(userId, userPwd, userName, phone, email, gender);
-		System.out.println("mem"+mem);
 		int result = new MemberService().insetMember(mem);
 		
 		if(result > 0) {

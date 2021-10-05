@@ -477,13 +477,17 @@
 	}
         $("input[type=password]").keyup(function () {
 
+    		var expPwd = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/;
+    		var newPwd = $("input[name='newPwd']");
+    		var newPwdV = newPwd.val();
+    		
         	if ($("#nowPwd").val() == $("#userPwd").val()) {
                 $("#chUserPw").css("color", "#00A41E");
             } else {
                 $("#chUserPw").css("color", "#FF0004");
             }
         	
-            if ($("#newPwd").val().length >= 6) {
+            if ($("#newPwd").val().length >= 6 && expPwd.test(newPwdV)==true) {
                 $("#6char").css("color", "#00A41E");
             } else {
                 $("#6char").css("color", "#FF0004");
