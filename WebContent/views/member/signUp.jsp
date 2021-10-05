@@ -318,8 +318,7 @@
 	                                    	<h6 style="color: #ffffff; text-align: center;">모두 동의해주세요</h6>
 	                                    	<br>
 	                                    </div>
-	                                    	<!-- <input type=button id="nextBUTT" class="nextBtn" style="z-index: 6; display:none; width:20%; height:65px; margin-right: 40%; font-size: h5;" value="다음"><br> -->
-	                                    <div id="nextBUTT" class="nextBtn" style="margin-right: 40%; width: 20%; z-index: 6;  display:none; background-color: #D958A0; height: 65px; border-radius: 5px;">
+	                                    <div id="nextB" class="nextBtn" style="margin-right: 40%; width: 20%; z-index: 6;  display:none; background-color: #D958A0; height: 65px; border-radius: 5px;">
 	                                    	<br>
 	                                    	<h6 style="color: #ffffff; text-align: center;">다음</h6>
 	                                    	<br>
@@ -355,10 +354,8 @@
 		                     all.onclick = function() {  //전체 체크를 누를 시
 		                      if (this.checked) {
 		                       setCheckbox(form1_data, true);   //form1_data(c1,c2,c3)의 값을 모두 Checked로 바꿈
-		                     $("#btnNext").prop("disabled", false);   //비활성화
 		                      } else {
 		                       setCheckbox(form1_data, false);  ////form1_data(c1,c2,c3)의 값을 모두 no checked로 바꿈
-		                        $("#btnNext").prop("disabled", true);   //활성화
 		                      }
 		                     }; 
 		                   
@@ -372,7 +369,7 @@
 								  }else{
 									  btnElement.innerText = "다음";
 									  btnElement.style.display="none";
-				                        $("#nextBUTT").css('display','');
+				                        $("#nextB").css('display','');
 				                        
 								  }
 								}
@@ -405,12 +402,10 @@
 	                                              type="text" required="required" name="userId" class="form-control" placeholder="아이디를 입력하세요"  />
 	                                   <button style="display: inline-block; background-color: #D958A0; color:#fff; border:none; width:200px; height:48px; border-radius: 5px;"
 	                                    type="button" name="idCheckBtn" id="idCheckBtn" onclick="checkId();">중복확인</button>
-	                                      <!-- </div>
-	                                      <div class="form-group"> -->
 	                                      <br><br>
 	                                        <label class="control-label">비밀번호 (영문, 숫자, 특수문자(@$!%*#?&)를 모두 포함하는 6자 이상의 비밀번호)</label>
 	                                        <input maxlength="100" type="password" required="required" name="userPwd" class="form-control" placeholder="비밀번호를 입력해주세요" />
-	                                        <label class="control-label">비밀번호 확인</label><label id = "pwdResult"></label>
+	                                        <label class="control-label">비밀번호 확인</label>
 	                                        <input maxlength="100" type="password" required="required" name="checkPwd" class="form-control" placeholder="비밀번호를 입력해주세요" />
 	            
 	                                        
@@ -532,7 +527,6 @@
 		                     phone.focus();
 		                     return false;
 		                  }
-		                  //alert("전화번호를 입력해주세요.");
 		               }else if(phone.val().length != 13 || phone.val().length < 13 || phone.val().length >= 14 ){
 		                  if(confirm("올바른 형식의 전화번호를 입력해주세요. \n ex) 010-XXXX-XXXX") == true){
 		                     phone.val('');
@@ -697,13 +691,10 @@
 			            $item.addClass('btn-info');
 			            allWells.hide();
 			            $target.show();
-			            //$target.find('input:eq(0)').focus();
 			        }
 			    });
 			
 			    allFinBtn.click(function(){
-			        // allBody.empty();
-			        // if(allBody.empty()){
 			        parent.location.href = '<%= request.getContextPath() %>/views/member/login.jsp';
 			        }
 			    );
